@@ -1,0 +1,52 @@
+# .github/workflows/robot-framework.yml
+
+name: Robot Framework Pipeline
+
+on:
+  push:
+    branches: [ main]
+ 
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  robot-test:
+    name: Run Robot Framework Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. Install Robot Framework & dependencies
+      - name: Install Dependencies
+        run: |
+          pip install robotframework
+          pip install robotframework-seleniumlibrary  # optional, remove if not needed
+
+      # 4. Run ONLY hello.robot
+      - name: Run hello.robot
+        run: |
+          robot \
+            --outputdir results \
+            --output output.xml \
+            --log log.html \
+            --report report.html \
+            tests/hello.robot
+
+      # 5. Collect & upload results (expires after 1 day)
+      - name: Upload Test Results
+        if: always()  # Run even if tests fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-framework-results
+          path: results/
+          retention-days: 1   # ← Expires after 1 day
+
+

@@ -28,7 +28,20 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install robotframework
-          pip install robotframework-seleniumlibrary  # optional, remove if not needed
+          pip install robotframework-seleniumlibrary  
+
+      - name: Install Chrome dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 \
+            libatk-bridge2.0-0 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxrandr2 \
+            libgbm1 \
+            libgtk-3-0
 
       # 4. Run ONLY hello.robot
       - name: Run hello.robot

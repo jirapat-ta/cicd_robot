@@ -1,6 +1,7 @@
 *** Settings ***
 Library    BuiltIn
+Library    SeleniumLibrary
 *** Test Cases ***
-Hello World
-   Log To Console    Hello
-    
+Check Title Vasup
+   Open Browser    https://www.vasup.co.th/    chrome
+   Title Should Be    VASUP

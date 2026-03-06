@@ -8,6 +8,6 @@ ${BROWSER}    Chrome
 *** Test Cases ***
 Check Title Vasup
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
-    Call Method    ${options}    add_argument    --headless=new
+    Call Method    ${options}    add_argument    --headless
     Open Browser    https://www.vasup.co.th/    ${BROWSER}    options=${options}
     Title Should Be    VASUP

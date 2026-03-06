@@ -1,12 +1,9 @@
-# .github/workflows/robot-framework.yml
-
 name: Robot Framework Pipeline
 
 on:
   push:
-    branches: [ main]
- 
-  workflow_dispatch:  # Allow manual trigger
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   robot-test:
@@ -14,36 +11,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 2. Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # 3. Install Robot Framework & dependencies
+      # ✅ ติดตั้ง Chrome browser
+      - name: Install Google Chrome
+        run: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
       - name: Install Dependencies
         run: |
           pip install robotframework
-          pip install robotframework-seleniumlibrary  
+          pip install robotframework-seleniumlibrary
+          pip install webdriver-manager
 
-      - name: Install Chrome dependencies
+      # ✅ ติดตั้ง ChromeDriver ให้ตรง version กับ Chrome
+      - name: Install ChromeDriver
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libnss3 \
-            libatk-bridge2.0-0 \
-            libx11-xcb1 \
-            libxcomposite1 \
-            libxdamage1 \
-            libxrandr2 \
-            libgbm1 \
-            libgtk-3-0
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1)
+          echo "Chrome major version: $CHROME_VERSION"
+          pip install chromedriver-autoinstaller
+          python -c "import chromedriver_autoinstaller; chromedriver_autoinstaller.install()"
 
-      # 4. Run ONLY hello.robot
       - name: Run hello.robot
         run: |
           robot \
@@ -51,15 +48,12 @@ jobs:
             --output output.xml \
             --log log.html \
             --report report.html \
-            hello.robot
+            tests/hello.robot
 
-      # 5. Collect & upload results (expires after 1 day)
       - name: Upload Test Results
-        if: always()  # Run even if tests fail
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: robot-framework-results
           path: results/
-          retention-days: 1   # ← Expires after 1 day
-
-
+          retention-days: 1

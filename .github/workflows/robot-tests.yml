@@ -48,7 +48,7 @@ jobs:
             --output output.xml \
             --log log.html \
             --report report.html \
-            tests/hello.robot
+            hello.robot
 
       - name: Upload Test Results
         if: always()

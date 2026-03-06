@@ -38,7 +38,7 @@ jobs:
             --output output.xml \
             --log log.html \
             --report report.html \
-            tests/hello.robot
+            hello.robot
 
       # 5. Collect & upload results (expires after 1 day)
       - name: Upload Test Results

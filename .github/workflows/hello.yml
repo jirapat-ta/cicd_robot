@@ -24,6 +24,7 @@ jobs:
           pip install robotframework
           pip install robotframework-seleniumlibrary
           pip install webdriver-manager
+          pip install robotframework-metrics
 
       - name: Run test.robot
         run: |
@@ -33,3 +34,35 @@ jobs:
             --log log.html \
             --report report.html \
             test.robot
+      - name: Send notification
+        if: always()
+        env:
+          TEAMS_WEBHOOK_URL: https://vasupthai.webhook.office.com/webhookb2/112086b3-4b42-4615-9dca-c1884569137e@ec79b49a-53ce-4c23-9b6a-feecfca13643/IncomingWebhook/5f95de9f03b242528436f53419b48b31/07aa00b6-7914-4ff3-9f90-eec15bac18f8/V2bkRIFf_GF58vUjp4_hQlmBfPgJpMaybPfdn_4HjToKE1
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          PASSED=$(python -c "import xml.etree.ElementTree as ET; tree = ET.parse('results/output.xml'); root = tree.getroot(); stat = root.find('.//total/stat'); print(stat.get('pass'))")
+          FAILED=$(python -c "import xml.etree.ElementTree as ET; tree = ET.parse('results/output.xml'); root = tree.getroot(); stat = root.find('.//total/stat'); print(stat.get('fail'))")
+
+          COLOR="2EB67D"
+          if [ "$FAILED" -ne "0" ]; then COLOR="FF0000"; fi
+
+          curl -H "Content-Type: application/json" -d "{
+          'themeColor': '$COLOR',
+            'summary': 'Robot Framework Test Results',
+            'sections': [{
+              'activityTitle': '🤖 Robot Framework Test Results',
+              'activitySubtitle': 'Repository: $REPO_NAME',
+              'facts': [
+                { 'name': 'Repository:', 'value': '$REPO_NAME' },
+                { 'name': 'Passed:', 'value': '$PASSED' },
+                { 'name': 'Failed:', 'value': '$FAILED' },
+                { 'name': 'Workflow URL:', 'value': '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}' }
+              ],
+              'markdown': true
+            }]
+          }" $TEAMS_WEBHOOK_URL
+
+
+
+
+        

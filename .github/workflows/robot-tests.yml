@@ -19,7 +19,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      # ✅ ติดตั้ง Chrome browser
       - name: Install Google Chrome
         run: |
           wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
@@ -33,7 +32,6 @@ jobs:
           pip install robotframework-seleniumlibrary
           pip install webdriver-manager
 
-      # ✅ ติดตั้ง ChromeDriver ให้ตรง version กับ Chrome
       - name: Install ChromeDriver
         run: |
           CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1)

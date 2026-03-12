@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.1.1 (Python 3.13.1 on win32)" generated="2026-03-06T14:38:23.149065" rpa="false" schemaversion="5">
-<suite id="s1" name="Hello" source="C:\Users\tatong\Desktop\cicd_robot\hello.robot">
-<test id="s1-t1" name="Check Title Vasup" line="9">
-<kw name="Open Browser" owner="SeleniumLibrary">
-<msg time="2026-03-06T14:38:23.576990" level="INFO">Opening browser 'Chrome' to base url 'https://www.vasup.co.th/'.</msg>
-<arg>https://www.vasup.co.th/</arg>
-<arg>${BROWSER}</arg>
-<doc>Opens a new browser instance to the optional ``url``.</doc>
-<status status="PASS" start="2026-03-06T14:38:23.576767" elapsed="3.836000"/>
+<robot generator="Robot 7.1.1 (Python 3.13.1 on win32)" generated="2026-03-06T15:08:02.689970" rpa="false" schemaversion="5">
+<suite id="s1" name="Test" source="C:\Users\tatong\Desktop\cicd_robot\test.robot">
+<test id="s1-t1" name="Log Hello world" line="2">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Hello world</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-06T15:08:02.721296" elapsed="0.000206"/>
 </kw>
-<kw name="Title Should Be" owner="SeleniumLibrary">
-<msg time="2026-03-06T14:38:27.442896" level="INFO">Page title is 'VASUP'.</msg>
-<arg>VASUP</arg>
-<doc>Verifies that the current page title equals ``title``.</doc>
-<status status="PASS" start="2026-03-06T14:38:27.413767" elapsed="0.029308"/>
-</kw>
-<status status="PASS" start="2026-03-06T14:38:23.575871" elapsed="3.867693"/>
+<status status="PASS" start="2026-03-06T15:08:02.720711" elapsed="0.001063"/>
 </test>
-<status status="PASS" start="2026-03-06T14:38:23.152593" elapsed="4.292519"/>
+<status status="PASS" start="2026-03-06T15:08:02.691640" elapsed="0.030735"/>
 </suite>
 <statistics>
 <total>
@@ -26,7 +18,7 @@
 <tag>
 </tag>
 <suite>
-<stat pass="1" fail="0" skip="0" id="s1" name="Hello">Hello</stat>
+<stat pass="1" fail="0" skip="0" id="s1" name="Test">Test</stat>
 </suite>
 </statistics>
 <errors>

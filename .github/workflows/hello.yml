@@ -1,0 +1,35 @@
+name: Robot Framework Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  robot-test:
+    name: Run Robot Framework Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install robotframework
+          pip install robotframework-seleniumlibrary
+          pip install webdriver-manager
+
+      - name: Run test.robot
+        run: |
+          robot \
+            --outputdir results \
+            --output output.xml \
+            --log log.html \
+            --report report.html \
+            test.robot
